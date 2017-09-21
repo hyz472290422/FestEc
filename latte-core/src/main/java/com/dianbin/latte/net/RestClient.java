@@ -1,10 +1,14 @@
 package com.dianbin.latte.net;
 
+import android.content.Context;
+
 import com.dianbin.latte.net.callback.IError;
 import com.dianbin.latte.net.callback.IFailure;
 import com.dianbin.latte.net.callback.IRequest;
 import com.dianbin.latte.net.callback.ISuccess;
 import com.dianbin.latte.net.callback.RequestCallbacks;
+import com.dianbin.latte.ui.LatteLoader;
+import com.dianbin.latte.ui.LoaderStyle;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -28,6 +32,8 @@ public class RestClient {
     private final IError ERROR;
     private final IFailure FAILURE;
     private final RequestBody BODY;
+    private final LoaderStyle LOADER_STYLE;
+    private final Context CONTEXT;
 
     public RestClient(String url,
                       Map<String, Object> params,
@@ -35,7 +41,9 @@ public class RestClient {
                       ISuccess success,
                       IError error,
                       IFailure failure,
-                      RequestBody body) {
+                      RequestBody body,
+                      LoaderStyle loaderstyle,
+                      Context context) {
         this.URL = url;
         PARAMS.putAll(params);
         this.REQUEST = request;
@@ -43,6 +51,8 @@ public class RestClient {
         this.ERROR = error;
         this.FAILURE = failure;
         this.BODY = body;
+        this.LOADER_STYLE = loaderstyle;
+        this.CONTEXT = context;
     }
 
     public static RestClientBuilder builder() {
@@ -55,6 +65,9 @@ public class RestClient {
         Call<String> call = null;
         if (REQUEST != null) {
             REQUEST.onRequestStart();
+        }
+        if (LOADER_STYLE != null) {
+            LatteLoader.showLoading(CONTEXT, LOADER_STYLE);
         }
         switch (method) {
             case GET:
@@ -79,7 +92,7 @@ public class RestClient {
 
 
     private Callback<String> getRequestCallback() {
-        return new RequestCallbacks(REQUEST, SUCCESS, ERROR, FAILURE);
+        return new RequestCallbacks(REQUEST, SUCCESS, ERROR, FAILURE,LOADER_STYLE);
     }
 
 

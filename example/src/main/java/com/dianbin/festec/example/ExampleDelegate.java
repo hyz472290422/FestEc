@@ -10,6 +10,7 @@ import com.dianbin.latte.net.RestClient;
 import com.dianbin.latte.net.callback.IError;
 import com.dianbin.latte.net.callback.IFailure;
 import com.dianbin.latte.net.callback.ISuccess;
+import com.dianbin.latte.ui.LoaderStyle;
 
 /**
  * Created by 63206 on 2017/9/13.
@@ -31,10 +32,11 @@ public class ExampleDelegate extends LatteDelegate {
     private void testRestClient() {
         RestClient.builder()
                 .url("https://www.baidu.com/")
+                .loader(getContext(), LoaderStyle.TriangleSkewSpinIndicator)
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String response) {
-                        Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), response.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .error(new IError() {

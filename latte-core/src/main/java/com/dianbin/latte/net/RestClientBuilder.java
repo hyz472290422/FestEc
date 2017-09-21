@@ -1,9 +1,13 @@
 package com.dianbin.latte.net;
 
+import android.content.Context;
+
 import com.dianbin.latte.net.callback.IError;
 import com.dianbin.latte.net.callback.IFailure;
 import com.dianbin.latte.net.callback.IRequest;
 import com.dianbin.latte.net.callback.ISuccess;
+import com.dianbin.latte.ui.LatteLoader;
+import com.dianbin.latte.ui.LoaderStyle;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -19,11 +23,13 @@ public class RestClientBuilder {
 
     private String mUrl;
     private static final Map<String, Object> PARAMS = RestCreator.getParams();
-    private IRequest mIRuquest;
-    private ISuccess mISuccess;
-    private IError mIError;
-    private IFailure mIFailure;
-    private RequestBody mBody;
+    private IRequest mIRuquest = null;
+    private ISuccess mISuccess = null;
+    private IError mIError = null;
+    private IFailure mIFailure = null;
+    private RequestBody mBody = null;
+    private LoaderStyle mLoaderStyle = null;
+    private Context mContext = null;
 
     public RestClientBuilder() {
     }
@@ -68,8 +74,19 @@ public class RestClientBuilder {
         return this;
     }
 
+    public final RestClientBuilder loader(Context context, LoaderStyle style) {
+        this.mContext = context;
+        this.mLoaderStyle = style;
+        return this;
+    }
+
+    public final RestClientBuilder loader(Context context) {
+        this.mContext = context;
+        this.mLoaderStyle = LoaderStyle.BallSpinFadeLoaderIndicator;
+        return this;
+    }
 
     public final RestClient build() {
-        return new RestClient(mUrl, PARAMS, mIRuquest, mISuccess, mIError, mIFailure, mBody);
+        return new RestClient(mUrl, PARAMS, mIRuquest, mISuccess, mIError, mIFailure, mBody, mLoaderStyle, mContext);
     }
 }
