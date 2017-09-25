@@ -6,9 +6,9 @@ import com.dianbin.latte.net.callback.IError;
 import com.dianbin.latte.net.callback.IFailure;
 import com.dianbin.latte.net.callback.IRequest;
 import com.dianbin.latte.net.callback.ISuccess;
-import com.dianbin.latte.ui.LatteLoader;
 import com.dianbin.latte.ui.LoaderStyle;
 
+import java.io.File;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -30,6 +30,7 @@ public class RestClientBuilder {
     private RequestBody mBody = null;
     private LoaderStyle mLoaderStyle = null;
     private Context mContext = null;
+    private File mFile = null;
 
     public RestClientBuilder() {
     }
@@ -46,6 +47,15 @@ public class RestClientBuilder {
 
     public final RestClientBuilder params(String key, String value) {
         PARAMS.put(key, value);
+        return this;
+    }
+    public final RestClientBuilder file(File file) {
+        this.mFile = file;
+        return this;
+    }
+
+    public final RestClientBuilder file(String file) {
+        this.mFile = new File(file);
         return this;
     }
 
@@ -74,6 +84,8 @@ public class RestClientBuilder {
         return this;
     }
 
+
+
     public final RestClientBuilder loader(Context context, LoaderStyle style) {
         this.mContext = context;
         this.mLoaderStyle = style;
@@ -87,6 +99,6 @@ public class RestClientBuilder {
     }
 
     public final RestClient build() {
-        return new RestClient(mUrl, PARAMS, mIRuquest, mISuccess, mIError, mIFailure, mBody, mLoaderStyle, mContext);
+        return new RestClient(mUrl, PARAMS, mIRuquest, mISuccess, mIError, mIFailure, mBody, mLoaderStyle, mContext, mFile);
     }
 }
