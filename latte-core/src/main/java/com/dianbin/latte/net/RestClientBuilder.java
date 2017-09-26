@@ -23,7 +23,10 @@ public class RestClientBuilder {
 
     private String mUrl;
     private static final Map<String, Object> PARAMS = RestCreator.getParams();
-    private IRequest mIRuquest = null;
+    private IRequest mIRequest = null;
+    private String mDownloadDir = null;
+    private String mExtension = null;
+    private String mName = null;
     private ISuccess mISuccess = null;
     private IError mIError = null;
     private IFailure mIFailure = null;
@@ -49,6 +52,7 @@ public class RestClientBuilder {
         PARAMS.put(key, value);
         return this;
     }
+
     public final RestClientBuilder file(File file) {
         this.mFile = file;
         return this;
@@ -59,13 +63,30 @@ public class RestClientBuilder {
         return this;
     }
 
+    //下载后文件存放，目录
+    public final RestClientBuilder dir(String dir) {
+        this.mDownloadDir = dir;
+        return this;
+    }
+
+    //下载文件后缀名
+    public final RestClientBuilder extension(String extension) {
+        this.mExtension = extension;
+        return this;
+    }
+
+    private final RestClientBuilder name(String name) {
+        this.mName = name;
+        return this;
+    }
+
     public final RestClientBuilder raw(String raw) {
         this.mBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), raw);
         return this;
     }
 
     public final RestClientBuilder onRequest(IRequest iRequest) {
-        this.mIRuquest = iRequest;
+        this.mIRequest = iRequest;
         return this;
     }
 
@@ -85,7 +106,6 @@ public class RestClientBuilder {
     }
 
 
-
     public final RestClientBuilder loader(Context context, LoaderStyle style) {
         this.mContext = context;
         this.mLoaderStyle = style;
@@ -99,6 +119,6 @@ public class RestClientBuilder {
     }
 
     public final RestClient build() {
-        return new RestClient(mUrl, PARAMS, mIRuquest, mISuccess, mIError, mIFailure, mBody, mLoaderStyle, mContext, mFile);
+        return new RestClient(mUrl, PARAMS, mIRequest, mDownloadDir, mExtension, mName, mISuccess, mIError, mIFailure, mBody, mLoaderStyle, mContext, mFile);
     }
 }

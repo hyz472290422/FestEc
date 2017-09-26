@@ -7,6 +7,7 @@ import com.dianbin.latte.net.callback.IFailure;
 import com.dianbin.latte.net.callback.IRequest;
 import com.dianbin.latte.net.callback.ISuccess;
 import com.dianbin.latte.net.callback.RequestCallbacks;
+import com.dianbin.latte.net.download.DownLoadHandler;
 import com.dianbin.latte.ui.LatteLoader;
 import com.dianbin.latte.ui.LoaderStyle;
 
@@ -30,6 +31,9 @@ public class RestClient {
     private final String URL;
     private static final WeakHashMap<String, Object> PARAMS = RestCreator.getParams();
     private final IRequest REQUEST;
+    private final String DOWNLOAD_DIR;
+    private final String EXTENSION;
+    private final String NAME;
     private final ISuccess SUCCESS;
     private final IError ERROR;
     private final IFailure FAILURE;
@@ -41,6 +45,9 @@ public class RestClient {
     public RestClient(String url,
                       Map<String, Object> params,
                       IRequest request,
+                      String downloadDir,
+                      String extension,
+                      String name,
                       ISuccess success,
                       IError error,
                       IFailure failure,
@@ -52,6 +59,9 @@ public class RestClient {
         this.URL = url;
         PARAMS.putAll(params);
         this.REQUEST = request;
+        this.DOWNLOAD_DIR = downloadDir;
+        this.EXTENSION = extension;
+        this.NAME = name;
         this.SUCCESS = success;
         this.ERROR = error;
         this.FAILURE = failure;
@@ -142,5 +152,8 @@ public class RestClient {
 
     public final void delete() {
         request(HttpMethod.DELETE);
+    }
+    public final void download(){
+        new DownLoadHandler(URL,REQUEST,DOWNLOAD_DIR,EXTENSION,NAME,SUCCESS,ERROR,FAILURE).handlerDownload();
     }
 }
